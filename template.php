@@ -1,6 +1,6 @@
 <?php
   $items = [
-        ['name' => '  Sword Art Online Hollow Realization PlayStation 4 BRAND NEW - Region Free',
+        ['name' => '  Sword Art Online Hollow Realization',
         'price' => 'Php 1421.00',
         'description' => 'developed by Aquria and published by Bandai Namco Entertainment for the PlayStation 4 and PlayStation Vita, based on the Japanese light novel series, Sword Art Online. It is the fourth video game in the series and the successor to Sword Art Online: Lost Song.',
         'img' => 'sao.jpg',
@@ -49,8 +49,17 @@
         'category' => 'Action'
         ]
       ];
-?>
-<?php
+
+// $users = [['username' => 'admin', 'password' => 'admin'],
+//           ['username' => 'Mavs', 'password' => 'gwapo!']];
+
+// $fp = fopen('users.json','w');
+// fwrite($fp, json_encode($users, JSON_PRETTY_PRINT));
+// fclose($fp);
+$string = file_get_contents('users.json');
+$users = json_decode($string, true);
+
+
   function create_dropdown($name_dropdown,$category){
     echo "<select name='$name_dropdown'>";
     echo "<option value='All'>All</option>";
@@ -66,95 +75,218 @@
     
   }
   function display_item($item){
-    echo "<center><img src = '".$item['img']."'></center>";
+    echo "<div class='w3-quarter  div_height'>";
+    echo "<center><img src = '".$item['img']."'style='width:70%'></center>";
       
     echo "<center><h3>" . $item['name'] . "</h3></center>";
 
     echo "<center>" . $item['price'] . "</center>";
 
     echo "<p>" . $item['description'] . "</p>";
+    echo "</div>";
   }
 ?>
 <!DOCTYPE html>
 <html>
-<title>W3.CSS Template</title>
+<title>My Ps4 Games</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
-.w3-bar-block .w3-bar-item {padding:20px}
+video{width: 100%; margin-bottom: -3%; position: relative; z-index: -1}
+.w3-bar-block .w3-bar-item {padding:20px;}
+.div_height{height:560px; }
+.aboutme{display:block;margin:auto; width:40%; border-radius: 80px;}
+.sign_out{font-size: 15px;}
+.register{}
+#login{}
+
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    -webkit-animation-name: fadeIn; /* Fade in the background */
+    -webkit-animation-duration: 0.4s;
+    animation-name: fadeIn;
+    animation-duration: 0.4s
+}
+
+/* Modal Content */
+.modal-content {
+    position: fixed;
+    bottom: 0;
+    background-color: #fefefe;
+    width: 100%;
+    -webkit-animation-name: slideIn;
+    -webkit-animation-duration: 0.4s;
+    animation-name: slideIn;
+    animation-duration: 0.4s
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+/* Add Animation */
+@-webkit-keyframes slideIn {
+    from {bottom: -300px; opacity: 0} 
+    to {bottom: 0; opacity: 1}
+}
+
+@keyframes slideIn {
+    from {bottom: -300px; opacity: 0}
+    to {bottom: 0; opacity: 1}
+}
+
+@-webkit-keyframes fadeIn {
+    from {opacity: 0} 
+    to {opacity: 1}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0} 
+    to {opacity: 1}
+}
+
 </style>
 <body>
 
 <!-- Sidebar (hidden by default) -->
 <nav class="w3-sidebar w3-bar-block w3-card-2 w3-top w3-xlarge w3-animate-left" style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
+ 
   <a href="javascript:void(0)" onclick="w3_close()"
   class="w3-bar-item w3-button">Close Menu</a>
-  <a href="#food" onclick="w3_close()" class="w3-bar-item w3-button">Food</a>
+   <center><form action="" method="POST" id="login">
+    Username:<br>
+      <input type="text" name="username"><br>
+    Password:<br>
+      <input type="password" name="password"><br>
+      <input type="submit" value="Login" class="button" name="login"> 
+  </form></center>
+  <a href="#food" onclick="w3_close()" class="w3-bar-item w3-button">Games</a>
   <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">About</a>
 </nav>
+<!-- The Modal -->
+  <div id="myModal" class="modal">
+
+  <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2>Register</h2>
+      </div>
+      <div class="modal-body">
+            <center><form action="" method="POST" id="login">
+              Username:<br>
+            <input type="text" name="username_reg" placeholder="Username"><br>
+              Password:<br>
+            <input type="password" name="password_reg" placeholder="Password"><br>
+             First Name:<br>
+            <input type="text" name="first_reg"><br>
+              Last Name:<br>
+            <input type="password" name="last_reg"><br>
+            <input type="submit" value="submit" class="button" name="register"> 
+            </form></center>
+            <?php
+              if (isset($_POST['register'])) {
+                $new_user['username'] = $_POST['username_reg'];
+                $new_user['password'] = $_POST['password_reg'];
+
+                $users[]=$new_user;
+                
+                $fp = fopen('users.json','w');
+                fwrite($fp, json_encode($users, JSON_PRETTY_PRINT));
+                fclose($fp);
+              }
+            ?>
+      </div>
+    </div>
+  </div>
 
 <!-- Top menu -->
 <div class="w3-top">
-  <div class="w3-white w3-xlarge" style="max-width:1200px;margin:auto">
+  <div class="w3-white w3-xlarge" style="max-width:1200px; margin:auto">
     <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">☰</div>
-    <div class="w3-right w3-padding-16">Mail</div>
+    <div class="w3-right w3-padding-16">
+    <span class="sign_out">
+    <?php
+      if (isset($_POST['login'])) {
+        foreach ($users as $user) {
+          if ($_POST['username'] == $user['username'] && $_POST['password'] == $user['password']) {
+            echo "Welcome! ".$user['username']." ".$user['password']."";
+            echo " [ <a href='#''>sign out</a> ]</span>&nbsp";
+          } 
+        }
+      }
+    ?>
+    <span class="sign_out"><button id="myBtn">Register</button> &nbsp</span> 
+     
+    </div>
     <div class="w3-center w3-padding-16">Ps4 Games</div>
   </div>
 </div>
+<video muted autoplay loop>
+        <source src="https://media.playstation.com/is/content/SCEA/playstation-4-king-tv-spot-video-hero-04-ps4-us-10nov16"><h1>yeabah!</h1>
+</video>
   
 <!-- !PAGE CONTENT! -->
-<div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
+<div class="w3-main w3-content w3-padding" style="max-width:1200px; margin-top: -20%; background-color:  rgba(255, 255, 255, 0.5); ">
 
   <!-- First Photo Grid-->
   <div class="w3-row-padding w3-padding-16 w3-center" id="food">
-    <div class="w3-quarter">
-      <img src="/w3images/sandwich.jpg" alt="Sandwich" style="width:100%">
-      <h3>The Perfect Sandwich, A Real NYC Classic</h3>
-      <p>Just some random text, lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
-    <div class="w3-quarter">
-      <img src="/w3images/steak.jpg" alt="Steak" style="width:100%">
-      <h3>Let Me Tell You About This Steak</h3>
-      <p>Once again, some random text to lorem lorem lorem lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
-    <div class="w3-quarter">
-      <img src="/w3images/cherries.jpg" alt="Cherries" style="width:100%">
-      <h3>Cherries, interrupted</h3>
-      <p>Lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-      <p>What else?</p>
-    </div>
-    <div class="w3-quarter">
-      <img src="/w3images/wine.jpg" alt="Pasta and Wine" style="width:100%">
-      <h3>Once Again, Robust Wine and Vegetable Pasta</h3>
-      <p>Lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
-  </div>
-  
-  <!-- Second Photo Grid-->
-  <div class="w3-row-padding w3-padding-16 w3-center">
-    <div class="w3-quarter">
-      <img src="/w3images/popsicle.jpg" alt="Popsicle" style="width:100%">
-      <h3>All I Need Is a Popsicle</h3>
-      <p>Lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
-    <div class="w3-quarter">
-      <img src="/w3images/salmon.jpg" alt="Salmon" style="width:100%">
-      <h3>Salmon For Your Skin</h3>
-      <p>Once again, some random text to lorem lorem lorem lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
-    <div class="w3-quarter">
-      <img src="/w3images/sandwich.jpg" alt="Sandwich" style="width:100%">
-      <h3>The Perfect Sandwich, A Real Classic</h3>
-      <p>Just some random text, lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
-    <div class="w3-quarter">
-      <img src="/w3images/croissant.jpg" alt="Croissant" style="width:100%">
-      <h3>Le French</h3>
-      <p>Lorem lorem lorem lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
+    <?php
+            $category = array_column($items, 'category');
+      $category = array_unique($category);
+      echo "<form method='POST'>";
+      
+      echo "<input type='submit' value='Filter' class='button' name='submit'> <br> ";
+      echo create_dropdown('category',$category). "</form>";
+      
+        
+    ?>
+    <br>
+    <?php
+      foreach ($items as $item) {   
+        if (!isset($_POST['category']) || $_POST['category'] == $item['category'] || $_POST['category'] == 'All') {
+            echo display_item($item);
+        }
+      }
+    ?>
   </div>
 
   <!-- Pagination -->
@@ -173,12 +305,12 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
 
   <!-- About Section -->
   <div class="w3-container w3-padding-32 w3-center">  
-    <h3>About Me, The Food Man</h3><br>
-    <img src="/w3images/chef.jpg" alt="Me" class="w3-image" style="display:block;margin:auto" width="800" height="533">
+    <h3>About Me, The Game Man</h3><br>
+    <img src="me.jpg" alt="Me" class="aboutme">
     <div class="w3-padding-32">
       <h4><b>I am Who I Am!</b></h4>
-      <h6><i>With Passion For Real, Good Food</i></h6>
-      <p>Just me, myself and I, exploring the universe of unknownment. I have a heart of love and an interest of lorem ipsum and mauris neque quam blog. I want to share my world with you. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      <h6><i>With Passion For Real, Good Game</i></h6>
+      <p>Just me, myself and I, exploring the universe of unknownment. I have a heart of love and an interest of Ps4 but dont have one. I want to share my world with you.</p>
     </div>
   </div>
   <hr>
@@ -189,6 +321,8 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
       <h3>FOOTER</h3>
       <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+      and
+      <p>Powered by <a href="http://www.tuitt.com" target="_blank">Tuitt</a></p>
     </div>
   
     <div class="w3-third">
@@ -223,6 +357,31 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
 </div>
 
 <script>
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 // Script to open and close sidebar
 function w3_open() {
     document.getElementById("mySidebar").style.display = "block";
