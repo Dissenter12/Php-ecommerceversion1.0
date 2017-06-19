@@ -122,7 +122,7 @@ video{width: 100%; margin-bottom: -3%; position: relative; z-index: -1}
 }
 
 /* Modal Content */
-.modal-content {
+.modal-content1 {
     position: fixed;
     bottom: 0;
     background-color: #fefefe;
@@ -148,19 +148,13 @@ video{width: 100%; margin-bottom: -3%; position: relative; z-index: -1}
     cursor: pointer;
 }
 
-.modal-header {
+.modal-header1 {
     padding: 2px 16px;
     background-color: #5cb85c;
     color: white;
 }
 
-.modal-body {padding: 2px 16px;}
-
-.modal-footer {
-    padding: 2px 16px;
-    background-color: #5cb85c;
-    color: white;
-}
+.modal-body1 {padding: 2px 16px;}
 
 /* Add Animation */
 @-webkit-keyframes slideIn {
@@ -202,15 +196,15 @@ video{width: 100%; margin-bottom: -3%; position: relative; z-index: -1}
   <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">About</a>
 </nav>
 <!-- The Modal -->
-  <div id="myModal" class="modal">
+  <div id="myModal1" class="modal">
 
   <!-- Modal content -->
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content1">
+      <div class="modal-header1">
         <span class="close">&times;</span>
         <h2>Register</h2>
       </div>
-      <div class="modal-body">
+      <div class="modal-body1">
             <center><form action="" method="POST" id="login">
               Username:<br>
             <input type="text" name="username_reg" placeholder="Username"><br>
@@ -232,6 +226,9 @@ video{width: 100%; margin-bottom: -3%; position: relative; z-index: -1}
                 $fp = fopen('users.json','w');
                 fwrite($fp, json_encode($users, JSON_PRETTY_PRINT));
                 fclose($fp);
+
+                $string = file_get_contents('users.json');
+                $users = json_decode($string, true);
               }
             ?>
       </div>
@@ -248,23 +245,80 @@ video{width: 100%; margin-bottom: -3%; position: relative; z-index: -1}
       if (isset($_POST['login'])) {
         foreach ($users as $user) {
           if ($_POST['username'] == $user['username'] && $_POST['password'] == $user['password']) {
-            echo "Welcome! ".$user['username']." ".$user['password']."";
-            echo " [ <a href='#''>sign out</a> ]</span>&nbsp";
+
+            echo "Welcome! ".$user['username']."";
+            echo " [ <a href='template.php'>sign out</a> ]&nbsp";
+            require_once 'mng_acct.php';
+            echo " [ <a href='#'  data-toggle='modal' data-target='#myModal'>manage account</a> ]&nbsp";
+            
           } 
         }
       }
     ?>
-    <span class="sign_out"><button id="myBtn">Register</button> &nbsp</span> 
+    </span>
+    <span class="sign_out"><a href="#" id="myBtn">Register</a> &nbsp</span> 
      
     </div>
     <div class="w3-center w3-padding-16">Ps4 Games</div>
   </div>
 </div>
 <video muted autoplay loop>
-        <source src="https://media.playstation.com/is/content/SCEA/playstation-4-king-tv-spot-video-hero-04-ps4-us-10nov16"><h1>yeabah!</h1>
+        <source src="https://media.playstation.com/is/content/SCEA/playstation-4-king-tv-spot-video-hero-04-ps4-us-10nov16">
 </video>
   
 <!-- !PAGE CONTENT! -->
+
+  <!-- Modal -->
+  <?php
+      if (isset($_POST['login'])) {
+        foreach ($users as $user) {
+          if ($_POST['username'] == $user['username'] && $_POST['password'] == $user['password']) {
+            $usernm = $user['username'];
+            $passw = $user['password'];
+            echo "
+  <div class='modal' id='myModal' role='dialog'>
+    <div class='modal-dialog'>
+       
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <button type='button' class='close' data-dismiss='modal'>&times;</button>
+          <h4 class='modal-title'>Modal Header</h4>
+        </div>
+        <div class='modal-body'>
+          <center><form action='' method='POST' id='update'>
+              Username:<br>
+            <input type='text' name='username_update' value='$usernm'><br>
+              Password:<br>
+            <input type='text' name='password_update' value='$passw'><br>
+             First Name:<br>
+            <input type='text' name='first_update'><br>
+              Last Name:<br>
+            <input type='password' name='last_update'><br>
+            <input type='submit' value='Update' class='button' name='update'> 
+            </form></center>
+        </div>
+      </div>
+      
+    </div>
+  </div>";
+}}}
+?>
+  <?php
+              if (isset($_POST['update'])) {
+                $username = $_POST['username_update'];
+                $password = $_POST['password_update'];
+
+                
+                
+                $fp = fopen('users.json','w');
+                fwrite($fp, json_encode($users, JSON_PRETTY_PRINT));
+                fclose($fp);
+
+                $string = file_get_contents('users.json');
+                $users = json_decode($string, true);
+              }
+  ?>
+
 <div class="w3-main w3-content w3-padding" style="max-width:1200px; margin-top: -20%; background-color:  rgba(255, 255, 255, 0.5); ">
 
   <!-- First Photo Grid-->
@@ -358,7 +412,7 @@ video{width: 100%; margin-bottom: -3%; position: relative; z-index: -1}
 
 <script>
 // Get the modal
-var modal = document.getElementById('myModal');
+var modal = document.getElementById('myModal1');
 
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
@@ -390,6 +444,9 @@ function w3_open() {
 function w3_close() {
     document.getElementById("mySidebar").style.display = "none";
 }
+// get the button that opens the managing account
+
+
 </script>
 
 </body>
